@@ -1,118 +1,84 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+// Hooksもしくは公式ライブラリからのインポート
 
-const inter = Inter({ subsets: ['latin'] })
+//ローカルからのインポート
+import { Store } from '@/common/Store';
+import db from '@/common/db';
+import Layout from '@/components/Layout';
+import ProductItem from '@/components/ProductItem';
+import SplideImage from '@/components/SplideImage';
+import Product from '@/models/Product';
+import axios from 'axios';
+import { useContext } from 'react';
+import { toast } from 'react-toastify';
+import { } from 'next/router';
 
-export default function Home() {
+const Home = ({ products }) => {
+
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
+  const addTCartHandler = async (product) => {
+    //商品が存在した場合はカートの数字を増やす
+    const existItem = cart.cartItems.find((x) => x.slug === product.slug);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    //在庫数以上にカートに追加されないようにする
+    if (data.countInStock < quantity) {
+      //商品の在庫数よりも追加されようとしたら、アラートメッセージを表示する
+      return toast.error(
+        '申し訳ありません、この商品はそれ以上在庫がありません。'
+      );
+    }
+
+
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+    toast.success('商品をカートに追加しました');
+  };
+
+
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <Layout title="【公式】セントロマンス - 通販サイト">
+
+      <div className='w-full h-20 md:h-36 mb-4 md:mb-5 rounded -z-10'><SplideImage /></div>
+      {/* gridクラスは商品をグリッド状に表示する */}
+      {/* grid-cols-1は横一列に商品を１つ表示するグリッドレイアウトを作成する
+      マウスオーバーで表示されるCSSプロパティにfrは分数の意味。
+      外枠の大きさに対して自動でグリッドを分割してそのサイズを調整する。*/}
+      {/* md:grid-cols-3 画面幅768px以上で横一列に商品を３つ、 
+      lg:grid-cols-4 画面幅1024px以上で横一列に商品を４つ表示する*/}
+
+      {/* <div className='flex justify-center w-full text-xs md:text-base p-0 mb-4 md:mb-5'>
+        <h3 className="mr-1 bg-gray-200 w-1/8 rounded py-2 px-3">探す</h3>
+        <input type="text" placeholder="欲しいファッションを見つけよう!" className='w-2/3 p-0' />
+
+
+      </div> */}
+
+      <div className="grid grid-cols-1 gap-4  md:grid-cols-3 lg:grid-cols-4">
+        {products.map((product) => (
+          <ProductItem
+            product={product}
+            key={product.slug}
+            addTCartHandler={addTCartHandler}
+          ></ProductItem>
+        ))}
       </div>
+    </Layout >
+  );
+};
+// サーバサイドで実行する処理(getServerSideProps)を定義する
+//getServerSideProps()はコンポーネントをレンダリングする前に実行される。getServerSideProps はリクエスト毎に実行されます。
+export const getServerSideProps = async () => {
+  await db.connect();
+  const products = await Product.find().lean();
+  return {
+    props: {
+      products: products.map(db.convertDocToObj),
+    },
+  };
+};
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+export default Home;
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+// 以下はメモ
+//
