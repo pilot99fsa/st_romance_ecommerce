@@ -121,6 +121,8 @@ const Layout = ({ title, children }) => {
             Copyright &copy; 2023 St. Romance
             <br />
             ※当サイトは架空のショッピングサイトです。{' '}
+            <br />
+            商品購入と決済のテスト機能が利用可能です。
           </p>
         </footer>
         {/* End of the footer section ヘッダーセクション終わり  */}
