@@ -73,7 +73,7 @@ const LoginScreen = () => {
             type="text"
             className="w-full"
             id="name"
-            placeholder='適当な名前を入力してください。'
+            placeholder='適当で架空の名前を入力してください。'
             autoFocus
             {...register('name', {
               required: '名前を入力して下さい',
