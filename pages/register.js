@@ -73,6 +73,7 @@ const LoginScreen = () => {
             type="text"
             className="w-full"
             id="name"
+            placeholder='適当な名前を入力してください。'
             autoFocus
             {...register('name', {
               required: '名前を入力して下さい',
@@ -89,6 +90,7 @@ const LoginScreen = () => {
           <label htmlFor="email">Eメール</label>
           <input
             type="email"
+            placeholder='適当で架空のアドレスを入力してください。例）xxx@xx.com'
             {...register('email', {
               required: 'メールアドレスを入力して下さい',
               pattern: {
