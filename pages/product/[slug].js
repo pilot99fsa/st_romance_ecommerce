@@ -83,10 +83,7 @@ const ProductScreen = (props) => {
                 <h1 className="py-2 text-xl md:text-3xl">{product.name}</h1>
               </li>
               <li>カテゴリー: {product.category}</li>
-              <li>ブランド: {product.brand}</li>
-              <li>
-                {product.rating} of {product.numReviews} レビュー
-              </li>
+             
               <li>商品の説明: {product.description}</li>
             </ul>
           </div>
