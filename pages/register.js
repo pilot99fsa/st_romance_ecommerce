@@ -113,6 +113,7 @@ const LoginScreen = () => {
           <label htmlFor="パスワード">パスワード</label>
           <input
             type="password"
+            placeholder='6桁以上のパスワード'
             {...register('password', {
               required: 'パスワードを入力して下さい',
               minLength: { value: 6, message: '少なくとも5文字以上は必要です' },
@@ -127,10 +128,11 @@ const LoginScreen = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="パスワードを認証">パスワードを登録する</label>
+          <label htmlFor="パスワードを認証">同じパスワードを入力して下さい。</label>
           <input
             className="w-full"
             type="password"
+            placeholder='6桁以上のパスワード'
             id="confirmPassword"
             {...register('confirmPassword', {
               required: 'パスワードを登録して下さい。',
