@@ -32,9 +32,9 @@ const hadler = async (req, res) => {
     });
     return;
   }
-  await db.connect();　
+  await db.connect();
   const toUpdateHandler = await User.findById(user._id);
-  toUpdateHandler.name = name;　
+  toUpdateHandler.name = name;
   toUpdateHandler.email = email;
   if (password) {
     toUpdateHandler.password = bcryptjs.hashSync(password); //パスワードはしっかりハッシュ化する
