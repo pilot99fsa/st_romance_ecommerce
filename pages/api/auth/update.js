@@ -32,7 +32,6 @@ const hadler = async (req, res) => {
     });
     return;
   }
-  
   await db.connect();　
   const toUpdateHandler = await User.findById(user._id);
   toUpdateHandler.name = name;　
