@@ -25,17 +25,17 @@ const hadler = async (req, res) => {
     !name ||
     !email ||
     !email.includes('@') || //メールアドレスには『＠』が含まれる必要がある
-    (password && password.trim().length < 5) //パスワードは最低でも5文字以上設定する必要がある
-  ) {//以上の4項目の内、一つでも満たされなければ以下の認証エラーを発する
+    (password && password.trim().length < 5) //パスワードは最低でも5文字以上設定する必要がある(5文字ではダメ、6文字は必要)
+  ) {
     res.status(422).json({
       message: '認証エラーです。',
     });
     return;
   }
-
-  await db.connect();
+　　　　
+  await db.connect();　
   const toUpdateHandler = await User.findById(user._id);
-  toUpdateHandler.name = name;
+  toUpdateHandler.name = name;　
   toUpdateHandler.email = email;
   if (password) {
     toUpdateHandler.password = bcryptjs.hashSync(password); //パスワードはしっかりハッシュ化する
