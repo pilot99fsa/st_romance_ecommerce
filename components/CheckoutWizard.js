@@ -9,7 +9,7 @@ const CheckoutWizard = ({ activeStep = 0 }) => {
           <div
             key={step}
             className={`flex-1 border-b-2 ${index <= activeStep
-              ? 'border-indigo-500   text-indigo-500 h-auto mx-1'
+              ? 'border-indigo-500 text-indigo-500 h-auto mx-1'
               : 'border-gray-400 text-gray-400 auto mx-1'
               }`}
           >
