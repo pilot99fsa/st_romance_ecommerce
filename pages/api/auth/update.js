@@ -25,14 +25,14 @@ const hadler = async (req, res) => {
     !name ||
     !email ||
     !email.includes('@') || //メールアドレスには『＠』が含まれる必要がある
-    (password && password.trim().length < 5) //パスワードは最低でも5文字以上設定する必要がある(5文字ではダメ、6文字は必要)
+    (password && password.trim().length < 5) //パスワードは最低でも5文字以上設定する必要がある
   ) {
     res.status(422).json({
       message: '認証エラーです。',
     });
     return;
   }
-　　　　
+  
   await db.connect();　
   const toUpdateHandler = await User.findById(user._id);
   toUpdateHandler.name = name;　
