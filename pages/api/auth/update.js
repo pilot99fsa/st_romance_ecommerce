@@ -13,7 +13,7 @@ const hadler = async (req, res) => {
       .status(400)
       .send({ message: `${req.method}はサポートされていません。` });
   }
-
+  
   const user = await getToken({ req });
   if (!user) {
     return res.status(401).send({ message: 'サインインして下さい' }); //ユーザー情報が存在してなければ、ログインを促す画面に飛ばされる。そもそもログインしなければプロフィールを更新できない
