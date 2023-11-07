@@ -61,7 +61,7 @@ const LoginScreen = () => {
       >
         <h1 className="mb-4 text-xl">ログイン</h1>
         {/** Eメールフォーム 始まり */}
-        <div class="mb-4">
+        <div className="mb-4">
           <label htmlFor="email">Eメール</label>
           <input
             type="email"
