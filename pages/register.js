@@ -67,7 +67,7 @@ const LoginScreen = () => {
         onSubmit={handleSubmit(submitHandler)}
       >
         <h1 className="mb-4 text-xl">新規会員登録</h1>
-        <div class="mb-4">
+        <div className="mb-4">
           <label htmlFor="name">名前</label>
           <input
             type="text"
