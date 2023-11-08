@@ -85,6 +85,7 @@ const ShippingScreen = () => {
             className="w-full"
             id="kanjiFullName"
             autoFocus
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('kanjiFullName', {
               required: '名前を入力して下さい(漢字)',
             })}
@@ -96,9 +97,9 @@ const ShippingScreen = () => {
         <div className="mb-4">
           <label htmlFor="furiganaFullName">ふりがな</label>
           <input
-
             className="w-full"
             id="furiganaFullName"
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('furiganaFullName', {
               required: 'ふりがなを入力して下さい。',
             })}
@@ -114,6 +115,7 @@ const ShippingScreen = () => {
           <input
             className="w-full"
             id="postalCode"
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('postalCode', {
               required: '郵便番号を入力して下さい',
             })}
@@ -128,6 +130,7 @@ const ShippingScreen = () => {
           <input
             className="w-full"
             id="prefectures"
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('prefectures', {
               required: '都道府県を入力して下さい。',
             })}
@@ -141,6 +144,7 @@ const ShippingScreen = () => {
           <input
             className="w-full"
             id="city"
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('city', {
               required: '市区町村を入力して下さい。',
             })}
@@ -155,6 +159,7 @@ const ShippingScreen = () => {
 
             className="w-full"
             id="strNumAndSptNum"
+            placeholder='適当で架空のものを入力して下さい。'
             {...register('strNumAndSptNum', {
               required: '番地および部屋番号を入力して下さい。',
             })}
